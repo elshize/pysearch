@@ -26,7 +26,7 @@ def _index():
 
     # term 2
     lexicon[2] = len(postings)
-    header = index.PostingHeader(mask=28, count=1, scoreoffset=3)
+    header = index.PostingHeader(mask=index.SHORTMASK, count=1, scoreoffset=3)
     postings.frombytes(header.pack())
 
     return index.Index(postings, lexicon, 3)
@@ -36,6 +36,19 @@ def test_weighted():
     idx = _index()
     docstream = idx.postinglist(1)
     assert list(query.weighted(docstream, 2)) == [(0, 6), (2, 6)]
+
+
+def test_daatstream():
+    idx = _index()
+    docstreams = [idx.postinglist(term) for term in [0, 1, 2]]
+    assert list(query.daatstream(docstreams)) == [(0, 6), (1, 6), (2, 6)]
+
+
+def test_daat():
+    idx = _index()
+    docstreams = [idx.postinglist(term) for term in [0, 1, 2]]
+    docstreams = [query.weighted(d, idx) for idx, d in enumerate(docstreams)]
+    assert query.daat(docstreams, k=2) == [(1, 6), (0, 3)]
 
 
 def test_taat():
