@@ -11,6 +11,8 @@ from py import path  # pylint: disable=no-name-in-module
 
 Posting = namedtuple('Posting', 'doc score')
 
+SHORTMASK = 268435456
+
 
 @attr.s
 class PostingHeader(object):
@@ -31,7 +33,7 @@ class PostingHeader(object):
 
         Short means that there is only one posting and it is included in the
         header."""
-        return self.mask == 268435456
+        return self.mask == SHORTMASK
 
     def short_postinglist(self):
         """Returns the short posting list included in the header."""

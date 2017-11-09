@@ -25,7 +25,7 @@ def _index():
 
     # term 2
     lexicon[2] = len(postings)
-    header = index.PostingHeader(mask=28, count=1, scoreoffset=3)
+    header = index.PostingHeader(mask=index.SHORTMASK, count=1, scoreoffset=3)
     postings.frombytes(header.pack())
 
     return index.Index(postings, lexicon, numdocs=3)
